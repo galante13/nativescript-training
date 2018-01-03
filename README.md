@@ -1,2 +1,2 @@
 # nativescript-training
-NativeScript tutorial.
+NativeScript with Angular tutorial.
