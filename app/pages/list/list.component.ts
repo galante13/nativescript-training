@@ -34,7 +34,7 @@ export class ListComponent implements OnInit {
         this.listLoaded = true;
       });
   }
-  
+
   share() {
     let listString = this.groceryList
       .map(grocery => grocery.name)
@@ -48,24 +48,43 @@ export class ListComponent implements OnInit {
       alert("Enter a grocery item");
       return;
     }
-  
+
     // Dismiss the keyboard
     let textField = <TextField>this.groceryTextField.nativeElement;
     textField.dismissSoftInput();
-  
+
     this.groceryListService.add(this.grocery)
       .subscribe(
-        groceryObject => {
-          this.groceryList.unshift(groceryObject);
-          this.grocery = "";
-        },
-        () => {
-          alert({
-            message: "An error occurred while adding an item to your list.",
-            okButtonText: "OK"
-          });
-          this.grocery = "";
+      groceryObject => {
+        this.groceryList.unshift(groceryObject);
+        this.grocery = "";
+      },
+      () => {
+        alert({
+          message: "An error occurred while adding an item to your list.",
+          okButtonText: "OK"
+        });
+        this.grocery = "";
+      }
+      )
+  }
+
+  delete(item: Grocery) {
+    this.groceryListService.delete(item.id)
+      .subscribe(
+      result => {
+        var index = this.groceryList.indexOf(item, 0);
+        if (index > -1) {
+          this.groceryList.splice(index, 1);
         }
+        alert(item.name + " has been deleted!");
+      },
+      () => {
+        alert({
+          message: `An error occurred while deleteing frocery of name ${item.name}`,
+          okButtonText: "OK"
+        });
+      }
       )
   }
 }
